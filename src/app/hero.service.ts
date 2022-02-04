@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Hero } from './hero';
 import { HEROES } from './mock-heroes';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from "@angular/common/http";
 
 @Injectable(
   {
@@ -9,13 +10,18 @@ import { Observable, of } from 'rxjs';
   }
 )
 export class HeroService {
-  getHeroes(): Observable<Hero[]>  {
-    return of(HEROES);
-  }
-  getHero(id: number): Observable<Hero> {
-    return of(HEROES.find(hero => hero.id === id));
-  }
-  constructor() {
-   }
 
+  private url = "https://heroes00.herokuapp.com/";
+
+  constructor (
+    private http: HttpClient
+  ) {}
+
+  getHeroes() {
+    return this.http.get(this.url);
+  }
+  getHero(id: number){
+    const url = `${this.url}/${id}`;
+    return this.http.get(url);
+  }
 }
